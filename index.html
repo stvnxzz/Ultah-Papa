@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy Birthday Papa 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b0e14;
+  --board-dark:#3d2b1f;
+  --board-light:#c9a87c;
+  --water:#0a2444;
+  --deep:#050d1a;
+  --gold:#e8b84b;
+  --gold2:#ffd97d;
+  --teal:#00c9c8;
+  --warm:#ff7043;
+  --cream:#fdf6e3;
+  --white:#ffffff;
+  --red:#c0392b;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Crimson Text',serif;background:var(--ink);color:var(--white);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cursor{position:fixed;width:20px;height:20px;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);font-size:18px;display:flex;align-items:center;justify-content:center}
+#cursor-trail{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:all 0.15s ease;opacity:0.5}
+
+/* MUSIC BTN */
+#music-btn{position:fixed;top:14px;right:14px;z-index:9999;width:48px;height:48px;border-radius:50%;border:2px solid var(--gold);background:rgba(5,13,26,0.9);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all 0.3s;animation:pulse-gold 2.5s infinite}
+#music-btn:hover{transform:scale(1.15)}
+#section-label{position:fixed;top:14px;right:72px;z-index:9999;background:rgba(5,13,26,0.85);border:1px solid rgba(232,184,75,0.3);border-radius:100px;padding:8px 14px;font-size:10px;letter-spacing:2px;color:rgba(232,184,75,0.7);text-transform:uppercase;pointer-events:none;transition:all 0.5s;opacity:0}
+@keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(232,184,75,0.5)}50%{box-shadow:0 0 0 12px rgba(232,184,75,0)}}
+
+/* NAV */
+#sidenav{position:fixed;left:12px;top:50%;transform:translateY(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.25);border:1px solid rgba(232,184,75,0.4);cursor:pointer;transition:all 0.3s}
+.nav-dot.active{background:var(--gold);transform:scale(1.6);box-shadow:0 0 8px var(--gold)}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--board-dark),#5d3c28);border:1px solid var(--gold);color:var(--gold);padding:10px 24px;border-radius:100px;font-size:13px;letter-spacing:1px;z-index:99999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+section{position:relative;z-index:10;overflow:hidden}
+
+/* FIXED BG */
+#fixed-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-chess-piece{position:absolute;font-size:clamp(40px,8vw,80px);opacity:0.04;animation:bg-drift linear infinite}
+@keyframes bg-drift{0%{transform:translateY(110vh) rotate(0deg)}100%{transform:translateY(-10vh) rotate(360deg)}}
+.bg-fish{position:absolute;font-size:clamp(20px,4vw,40px);opacity:0.06;animation:bg-swim linear infinite}
+@keyframes bg-swim{0%{transform:translateX(-100px) scaleX(-1)}49%{transform:translateX(110vw) scaleX(-1)}50%{transform:translateX(110vw) scaleX(1)}100%{transform:translateX(-100px) scaleX(1)}}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 20px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,#1a0f06 0%,var(--ink) 70%)}
+.hero-chessboard{position:absolute;bottom:0;left:0;right:0;height:40%;opacity:0.15;display:grid;grid-template-columns:repeat(8,1fr)}
+.chess-tile{aspect-ratio:1}
+.chess-tile.dark{background:#3d2b1f}
+.chess-tile.light{background:#c9a87c}
+.hero-water{position:absolute;bottom:0;left:0;right:0;height:25%;background:linear-gradient(180deg,transparent,rgba(10,36,68,0.9));overflow:hidden}
+.wave-svg{position:absolute;bottom:0;width:200%;animation:wave-slide 8s linear infinite}
+.wave-svg2{animation-duration:12s;animation-direction:reverse;opacity:0.5;bottom:5px}
+@keyframes wave-slide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.hero-content{position:relative;z-index:20}
+.hero-badge{display:inline-block;padding:5px 20px;border:1px solid var(--gold);border-radius:100px;font-size:11px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;animation:fadeUp 1s ease forwards;opacity:0}
+.hero-king{font-size:clamp(50px,14vw,100px);display:block;margin-bottom:8px;animation:king-entrance 1.2s cubic-bezier(0.34,1.56,0.64,1) forwards 0.2s,float-king 4s ease-in-out infinite 1.5s;opacity:0;filter:drop-shadow(0 0 30px rgba(232,184,75,0.8))}
+@keyframes king-entrance{from{opacity:0;transform:scale(0.3) rotate(-15deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+@keyframes float-king{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(3deg)}}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(36px,10vw,80px);font-weight:900;line-height:1;background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 40%,var(--warm) 70%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:300% 300%;animation:gold-move 4s ease infinite,fadeUp 1s ease forwards 0.5s;opacity:0}
+@keyframes gold-move{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-sub{font-family:'Dancing Script',cursive;font-size:clamp(22px,6vw,42px);color:var(--cream);animation:fadeUp 1s ease forwards 0.8s;opacity:0;margin-top:6px;text-shadow:0 2px 20px rgba(232,184,75,0.4)}
+.hero-icons{font-size:32px;letter-spacing:12px;margin-top:16px;animation:fadeUp 1s ease forwards 1s;opacity:0}
+.hero-date{margin-top:16px;font-size:12px;letter-spacing:6px;color:rgba(255,255,255,0.5);text-transform:uppercase;animation:fadeUp 1s ease forwards 1.2s;opacity:0}
+.hero-rod{position:absolute;top:15px;right:15px;font-size:50px;animation:rod-sway 3s ease-in-out infinite;transform-origin:bottom center}
+@keyframes rod-sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(5deg)}}
+.hero-line{position:absolute;top:60px;right:34px;width:2px;height:80px;background:linear-gradient(to bottom,transparent,rgba(200,220,255,0.6));animation:line-bob 3s ease-in-out infinite}
+@keyframes line-bob{0%,100%{height:80px}50%{height:95px}}
+.scroll-cue{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);text-align:center;animation:fadeIn 1s forwards 2s,bounce-y 2s ease-in-out infinite 2s;opacity:0;cursor:pointer;z-index:20}
+.scroll-cue span{font-size:10px;letter-spacing:4px;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px}
+.arrow-down{width:20px;height:20px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);margin:0 auto}
+@keyframes bounce-y{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* PARTICLES */
+.confetti-p{position:fixed;pointer-events:none;z-index:9997;border-radius:2px;animation:confetti-f linear forwards}
+@keyframes confetti-f{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.ripple-p{position:fixed;border-radius:50%;border:2px solid rgba(232,184,75,0.5);pointer-events:none;z-index:9;transform:translate(-50%,-50%);animation:ripple-e 0.8s ease-out forwards}
+@keyframes ripple-e{0%{width:0;height:0;opacity:1}100%{width:150px;height:150px;opacity:0}}
+.sparkle-p{position:fixed;pointer-events:none;z-index:9998;font-size:20px;animation:sparkle-f 1.2s ease forwards}
+@keyframes sparkle-f{0%{transform:scale(0) rotate(0);opacity:1}50%{transform:scale(1.5) rotate(180deg);opacity:1}100%{transform:scale(0) rotate(360deg);opacity:0}}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{to{opacity:1}}
+.reveal{opacity:0;transform:translateY(40px);transition:all 0.7s cubic-bezier(0.25,0.46,0.45,0.94)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.sec-title{font-family:'Cinzel',serif;font-size:clamp(22px,5.5vw,36px);font-weight:900;text-align:center;margin-bottom:10px;color:var(--gold);position:relative}
+.sec-title::after{content:'';display:block;width:50px;height:3px;background:linear-gradient(to right,var(--gold),var(--teal));margin:10px auto 0;border-radius:2px}
+.sec-sub{text-align:center;font-size:14px;color:rgba(255,255,255,0.45);letter-spacing:3px;text-transform:uppercase;margin-bottom:40px}
+
+/* ===== LEGENDS SECTION ===== */
+#legends-section{background:linear-gradient(180deg,#0a0605 0%,#120a04 50%,#050d1a 100%);padding:70px 20px}
+.legends-wrapper{max-width:560px;margin:0 auto}
+.legends-intro{text-align:center;font-style:italic;font-size:15px;color:rgba(255,255,255,0.65);margin-bottom:36px;line-height:1.7}
+.legend-cards{display:flex;flex-direction:column;gap:22px}
+.legend-card{background:linear-gradient(135deg,rgba(40,24,10,0.9),rgba(10,30,60,0.75));border-radius:20px;padding:0;overflow:hidden;position:relative;transition:all 0.35s;cursor:pointer;border:1px solid transparent}
+.legend-card.chess-legend{border-color:rgba(232,184,75,0.3)}
+.legend-card.chess-legend:hover{border-color:rgba(232,184,75,0.7);transform:translateY(-5px) scale(1.01);box-shadow:0 16px 50px rgba(232,184,75,0.15)}
+.legend-card.fish-legend{border-color:rgba(0,201,200,0.3)}
+.legend-card.fish-legend:hover{border-color:rgba(0,201,200,0.7);transform:translateY(-5px) scale(1.01);box-shadow:0 16px 50px rgba(0,201,200,0.15)}
+.legend-banner{padding:10px 18px 0;display:flex;align-items:center;gap:10px}
+.legend-badge{padding:3px 10px;border-radius:100px;font-size:9px;letter-spacing:3px;text-transform:uppercase;font-family:'Cinzel',serif;font-weight:700}
+.chess-badge{background:rgba(232,184,75,0.15);color:var(--gold);border:1px solid rgba(232,184,75,0.4)}
+.fish-badge{background:rgba(0,201,200,0.12);color:var(--teal);border:1px solid rgba(0,201,200,0.35)}
+.legend-verified{font-size:14px;margin-left:auto;opacity:0.7}
+.legend-body{padding:14px 18px 18px;display:flex;gap:14px;align-items:flex-start}
+.legend-avatar-wrap{flex-shrink:0;position:relative}
+.legend-avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;position:relative;overflow:hidden}
+.legend-avatar.chess-av{background:radial-gradient(circle,#4a3520,#1a0d05);border:2.5px solid var(--gold);box-shadow:0 0 20px rgba(232,184,75,0.35)}
+.legend-avatar.fish-av{background:radial-gradient(circle,#0a2a50,#041020);border:2.5px solid var(--teal);box-shadow:0 0 20px rgba(0,201,200,0.35)}
+.legend-online{position:absolute;bottom:3px;right:3px;width:12px;height:12px;border-radius:50%;border:2px solid #0b0e14}
+.online-chess{background:#4caf50}
+.online-fish{background:#29b6f6}
+.legend-text{flex:1;min-width:0}
+.legend-name{font-family:'Cinzel',serif;font-size:15px;font-weight:900;margin-bottom:1px}
+.legend-name.chess-name{color:var(--gold)}
+.legend-name.fish-name{color:var(--teal)}
+.legend-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px}
+.legend-msg{font-size:14.5px;color:var(--cream);line-height:1.75;font-style:italic;position:relative}
+.legend-msg::before{content:'"';font-size:36px;line-height:0;position:absolute;top:14px;left:-2px;opacity:0.2}
+.legend-msg.chess-msg::before{color:var(--gold)}
+.legend-msg.fish-msg::before{color:var(--teal)}
+.legend-msg-inner{padding-left:18px}
+.legend-emoji-row{margin-top:8px;font-size:16px;letter-spacing:4px;padding-left:18px}
+.legend-shine{position:absolute;top:0;right:-60px;width:35px;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,0.04),transparent);transform:skewX(-15deg);animation:shine-slide 5s ease-in-out infinite}
+@keyframes shine-slide{0%,100%{right:-60px;opacity:0}50%{right:110%;opacity:1}}
+
+/* ===== CHESS GAME ===== */
+#chess-game{background:linear-gradient(180deg,#0e0a05 0%,#1a0f06 100%);padding:70px 20px}
+.chess-wrapper{max-width:500px;margin:0 auto}
+.chess-intro{text-align:center;color:var(--cream);font-size:15px;line-height:1.7;margin-bottom:28px;font-style:italic;opacity:0.85}
+.chess-arena{border:3px solid var(--gold);border-radius:8px;overflow:hidden;box-shadow:0 0 40px rgba(232,184,75,0.3),0 0 80px rgba(232,184,75,0.1);position:relative}
+.chess-header{background:linear-gradient(135deg,var(--board-dark),#2a1a0e);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,184,75,0.3)}
+.chess-player{display:flex;align-items:center;gap:8px;font-size:13px}
+.chess-player-icon{font-size:22px}
+.chess-player-name{color:var(--gold);font-weight:600}
+.chess-status{font-size:12px;color:var(--teal);text-align:center;letter-spacing:2px;text-transform:uppercase;padding:6px;background:rgba(0,201,200,0.08);border-bottom:1px solid rgba(0,201,200,0.2)}
+#chess-board{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;cursor:pointer}
+.chess-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:clamp(20px,5vw,34px);transition:background 0.2s;position:relative;user-select:none}
+.chess-cell.light{background:var(--board-light)}
+.chess-cell.dark{background:var(--board-dark)}
+.chess-cell.selected{background:#e6c040!important;box-shadow:inset 0 0 0 3px rgba(255,255,255,0.5)}
+.chess-cell.movable{background:rgba(0,201,200,0.45)!important}
+.chess-cell.movable::after{content:'●';color:rgba(0,201,200,0.7);font-size:10px;position:absolute}
+.chess-cell:hover{filter:brightness(1.2)}
+.chess-footer{background:linear-gradient(135deg,var(--board-dark),#2a1a0e);padding:10px 14px;display:flex;gap:8px;border-top:1px solid rgba(232,184,75,0.3)}
+.chess-btn{flex:1;padding:9px 0;border:1px solid var(--gold);background:rgba(232,184,75,0.1);color:var(--gold);border-radius:6px;cursor:pointer;font-size:12px;letter-spacing:1px;transition:all 0.3s;font-family:'Cinzel',serif}
+.chess-btn:hover{background:rgba(232,184,75,0.25);transform:translateY(-1px)}
+.chess-move-log{background:rgba(0,0,0,0.4);border:1px solid rgba(232,184,75,0.15);border-radius:6px;padding:8px 12px;max-height:60px;overflow-y:auto;margin-top:10px;font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:1px;font-family:monospace}
+
+/* ===== FISHING GAME ===== */
+#fishing-game{background:linear-gradient(180deg,#020e20 0%,var(--water) 100%);padding:70px 20px}
+.fishing-wrapper{max-width:500px;margin:0 auto}
+.fishing-arena{border:2px solid rgba(0,201,200,0.4);border-radius:12px;overflow:hidden;box-shadow:0 0 40px rgba(0,201,200,0.2)}
+.fishing-sky{background:linear-gradient(180deg,#020c1a 0%,#0a2040 60%,#1565c0 100%);height:120px;position:relative;overflow:hidden}
+.fishing-moon{position:absolute;top:15px;left:20px;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffde7,#ffd54f);box-shadow:0 0 20px rgba(255,213,79,0.6),0 0 40px rgba(255,213,79,0.2)}
+.fishing-stars-wrap{position:absolute;inset:0}
+.fishing-rod-game{position:absolute;right:20px;top:-5px;font-size:48px;transform:rotate(30deg);transform-origin:bottom right}
+.fishing-line-game{position:absolute;right:38px;top:35px;width:1.5px;background:linear-gradient(to bottom,rgba(200,230,255,0.8),rgba(200,230,255,0.3));transition:height 0.5s ease;transform-origin:top center}
+.fishing-bobber{position:absolute;width:14px;height:14px;border-radius:50%;background:linear-gradient(to bottom,#ef5350,#fff);border:1px solid #333;right:-6px;bottom:-6px;animation:bobber-idle 1.5s ease-in-out infinite}
+@keyframes bobber-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+.fishing-water{background:linear-gradient(180deg,#1565c0 0%,#0d47a1 40%,#0a2f6e 100%);height:220px;position:relative;overflow:hidden}
+.fish-in-water{position:absolute;font-size:24px;animation:fish-swim-water linear infinite;cursor:pointer;transition:transform 0.2s;user-select:none}
+.fish-in-water:hover{transform:scale(1.2)}
+@keyframes fish-swim-water{0%{transform:translateX(-60px) scaleX(-1);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateX(calc(100vw + 60px)) scaleX(-1);opacity:0}}
+.wave-overlay{position:absolute;top:0;left:-100%;width:300%;height:30px;background:linear-gradient(to bottom,rgba(21,101,192,0.6),transparent);animation:wave-o 6s linear infinite}
+@keyframes wave-o{0%{transform:translateX(0)}100%{transform:translateX(33%)}}.wave-overlay2{animation-duration:9s;animation-direction:reverse;top:5px;opacity:0.5}
+.fishing-panel{background:linear-gradient(135deg,#061525,#0a2040);padding:14px;border-top:1px solid rgba(0,201,200,0.3)}
+.fishing-stats{display:flex;justify-content:space-around;margin-bottom:12px}
+.fishing-stat{text-align:center}
+.fishing-stat-val{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);display:block}
+.fishing-stat-lbl{font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase}
+.fishing-btns{display:flex;gap:8px}
+.fish-btn{flex:1;padding:10px 0;border-radius:8px;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1px;font-weight:700;transition:all 0.3s}
+.fish-cast-btn{background:linear-gradient(135deg,var(--teal),#0097a7);color:var(--ink)}
+.fish-cast-btn:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(0,201,200,0.4)}
+.fish-reset-btn{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15)}
+.catch-anim{position:absolute;pointer-events:none;z-index:100;font-size:28px;animation:catch-pop 1.2s cubic-bezier(0.34,1.56,0.64,1) forwards}
+@keyframes catch-pop{0%{transform:scale(0) translateY(0);opacity:1}60%{transform:scale(1.5) translateY(-40px);opacity:1}100%{transform:scale(0.5) translateY(-80px);opacity:0}}
+.fishing-msg{text-align:center;font-size:13px;color:var(--teal);margin-top:8px;letter-spacing:1px;min-height:20px}
+.catch-log{background:rgba(0,0,0,0.3);border-radius:8px;padding:8px 12px;margin-top:10px;max-height:60px;overflow-y:auto;font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:1px}
+
+/* ===== LETTER ===== */
+#letter{background:linear-gradient(180deg,#050d1a 0%,#030810 100%);padding:70px 20px}
+.letter-wrapper{max-width:580px;margin:0 auto}
+.envelope-btn{display:block;text-align:center;cursor:pointer;margin-bottom:24px}
+.env-icon{font-size:72px;display:inline-block;animation:env-float 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(232,184,75,0.5));transition:transform 0.3s}
+@keyframes env-float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+.env-hint{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-top:8px;animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.letter-paper{display:none;background:linear-gradient(145deg,#fff9f0,#fff3e0,#fff9f0);border-radius:16px;padding:36px 28px;box-shadow:0 0 0 1px rgba(255,193,7,0.3),0 25px 60px rgba(0,0,0,0.6);animation:paper-open 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;transform-origin:top center;position:relative}
+@keyframes paper-open{from{opacity:0;transform:scaleY(0.2) translateY(-30px)}to{opacity:1;transform:scaleY(1) translateY(0)}}
+.letter-paper::before{content:'';position:absolute;inset:36px 28px;background:repeating-linear-gradient(transparent,transparent 27px,rgba(173,216,230,0.3) 27px,rgba(173,216,230,0.3) 28px);pointer-events:none;z-index:0}
+.letter-top-deco{text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:18px;position:relative;z-index:1}
+.letter-salute{font-family:'Dancing Script',cursive;font-size:26px;color:#5d4037;margin-bottom:14px;font-weight:700;position:relative;z-index:1}
+.letter-body{color:#3e2723;line-height:1.9;font-size:15px;position:relative;z-index:1}
+.letter-body p{margin-bottom:14px;opacity:0;transform:translateY(8px);transition:all 0.5s ease}
+.letter-body p.vis{opacity:1;transform:translateY(0)}
+.letter-hl{background:linear-gradient(to right,rgba(255,152,0,0.18),rgba(255,193,7,0.12));padding:12px 14px;border-left:3px solid #ff8f00;border-radius:0 8px 8px 0;margin:14px 0}
+.letter-close-text{font-family:'Dancing Script',cursive;font-size:22px;color:#5d4037;text-align:right;margin-top:22px;font-weight:700;position:relative;z-index:1}
+.letter-sign{text-align:right;color:#5d4037;font-size:13px;margin-top:6px;position:relative;z-index:1}
+.letter-bottom-deco{text-align:center;font-size:18px;letter-spacing:6px;margin-top:18px;opacity:0.5;position:relative;z-index:1}
+.letter-close-btn{display:block;margin:18px auto 0;padding:10px 26px;background:linear-gradient(135deg,#ff8f00,var(--gold));color:var(--ink);border:none;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;transition:all 0.3s;letter-spacing:1px;font-family:'Cinzel',serif}
+.letter-close-btn:hover{transform:scale(1.05);box-shadow:0 5px 18px rgba(255,143,0,0.4)}
+
+/* ===== WISHES ===== */
+#wishes{background:linear-gradient(180deg,#030810 0%,#050d1a 100%);padding:70px 20px;text-align:center}
+.wishes-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:480px;margin:0 auto 30px}
+.wish-card{background:linear-gradient(135deg,rgba(61,43,31,0.5),rgba(10,36,68,0.5));border:1px solid rgba(232,184,75,0.2);border-radius:14px;padding:20px 14px;position:relative;overflow:hidden;transition:all 0.3s}
+.wish-card:hover{transform:translateY(-4px);border-color:rgba(232,184,75,0.4)}
+.wish-icon{font-size:34px;display:block;margin-bottom:10px;animation:wish-pulse 2.5s ease-in-out infinite}
+@keyframes wish-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.wish-text{font-size:13px;color:var(--cream);line-height:1.6}
+.wish-highlight{font-family:'Cinzel',serif;color:var(--gold)}
+.final-banner{max-width:480px;margin:0 auto 30px;background:linear-gradient(135deg,rgba(61,43,31,0.7),rgba(10,36,68,0.7));border:2px solid var(--gold);border-radius:20px;padding:30px 24px;position:relative;overflow:hidden}
+.final-banner::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(232,184,75,0.06) 60deg,transparent 120deg);animation:spin-glow 10s linear infinite}
+@keyframes spin-glow{to{transform:rotate(360deg)}}
+.final-banner-emoji{font-size:52px;display:block;margin-bottom:12px;animation:spin-bounce 3s ease-in-out infinite}
+@keyframes spin-bounce{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.15) rotate(10deg)}}
+.final-banner-text{font-family:'Cinzel',serif;font-size:clamp(18px,4.5vw,26px);color:var(--gold);line-height:1.5;position:relative;z-index:1}
+.final-banner-sub{font-size:14px;color:var(--cream);margin-top:10px;font-style:italic;position:relative;z-index:1;opacity:0.8}
+.fw-wrap{height:100px;position:relative;overflow:hidden;max-width:400px;margin:0 auto 30px}
+.fw-dot{position:absolute;border-radius:50%;animation:fw-exp ease-out infinite}
+@keyframes fw-exp{0%{transform:scale(0);opacity:1}100%{transform:scale(14);opacity:0}}
+
+footer{background:#020609;text-align:center;padding:36px 20px;position:relative;z-index:10;border-top:1px solid rgba(232,184,75,0.1)}
+.footer-icons{font-size:26px;letter-spacing:10px;display:block;margin-bottom:10px;animation:footer-drift 4s ease-in-out infinite}
+@keyframes footer-drift{0%,100%{letter-spacing:10px}50%{letter-spacing:14px}}
+footer p{font-size:12px;color:rgba(255,255,255,0.25);letter-spacing:3px;margin-bottom:4px}
+
+/* MUSIC VIZ */
+#music-viz{position:fixed;bottom:0;left:0;right:0;height:50px;pointer-events:none;z-index:9990;display:flex;align-items:flex-end;gap:2px;padding:0 8px;opacity:0.35}
+.viz-bar{flex:1;background:linear-gradient(to top,var(--gold),var(--teal));border-radius:2px 2px 0 0;transition:height 0.1s ease;min-height:2px}
+
+/* SECTION MUSIC INDICATOR */
+.sec-music-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;opacity:0.7}
+.sec-music-tag.chess-tag{background:rgba(232,184,75,0.1);color:var(--gold);border:1px solid rgba(232,184,75,0.25)}
+.sec-music-tag.fish-tag{background:rgba(0,201,200,0.1);color:var(--teal);border:1px solid rgba(0,201,200,0.25)}
+.sec-music-tag.letter-tag{background:rgba(255,112,67,0.1);color:var(--warm);border:1px solid rgba(255,112,67,0.25)}
+
+@media(max-width:380px){.wishes-grid{grid-template-columns:1fr}.chess-cell{font-size:18px}}
+</style>
+</head>
+<body>
+
+<div id="cursor">♟</div>
+<div id="cursor-trail"></div>
+<button id="music-btn" onclick="toggleMusic()" title="Play/Pause">🎵</button>
+<div id="section-label"></div>
+<div id="music-viz"></div>
+
+<div id="sidenav">
+  <div class="nav-dot active" onclick="goTo('hero')" title="Home"></div>
+  <div class="nav-dot" onclick="goTo('legends-section')" title="Legends"></div>
+  <div class="nav-dot" onclick="goTo('chess-game')" title="Catur"></div>
+  <div class="nav-dot" onclick="goTo('fishing-game')" title="Mancing"></div>
+  <div class="nav-dot" onclick="goTo('letter')" title="Surat"></div>
+  <div class="nav-dot" onclick="goTo('wishes')" title="Doa"></div>
+</div>
+<div id="toast"></div>
+<div id="fixed-bg"></div>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-chessboard" id="hero-chess"></div>
+  <div class="hero-water">
+    <svg class="wave-svg" viewBox="0 0 1200 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,30 C150,55 350,5 600,30 C850,55 1050,5 1200,30 L1200,60 L0,60Z" fill="rgba(10,36,68,0.7)"/><path d="M0,45 C200,20 400,55 600,45 C800,35 1000,55 1200,45 L1200,60 L0,60Z" fill="rgba(5,13,26,0.9)"/></svg>
+    <svg class="wave-svg wave-svg2" viewBox="0 0 1200 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,20 C300,50 600,10 900,30 C1050,40 1150,15 1200,20 L1200,60 L0,60Z" fill="rgba(13,47,94,0.5)"/></svg>
+  </div>
+  <div class="hero-rod">🎣</div>
+  <div class="hero-line"><div class="fishing-bobber"></div></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Ulang Tahun Istimewa ✦</div>
+    <span class="hero-king">👑</span>
+    <div class="hero-title">Happy Birthday</div>
+    <div class="hero-sub">Papa Tercinta 🎣♟</div>
+    <div class="hero-icons">🐟 ♛ 🎣 ♞ 🐠</div>
+    <div class="hero-date">12 · Juni · Penuh Cinta & Syukur</div>
+  </div>
+  <div class="scroll-cue" onclick="goTo('legends-section')">
+    <span>Scroll</span>
+    <div class="arrow-down"></div>
+  </div>
+</section>
+
+<!-- ===== LEGENDS HBD ===== -->
+<section id="legends-section">
+  <div class="legends-wrapper">
+    <div class="sec-title reveal">🏆 Para Legenda Bilang HBD!</div>
+    <div class="sec-sub reveal">Bahkan para juara dunia ikut merayakan hari Papa</div>
+    <div class="legends-intro reveal">Papa — hari ini bukan cuma keluarga yang merasakan betapa spesialnya kamu. Para legenda catur dan mancing dunia pun ikut mengucapkan selamat ulang tahun! 🎂</div>
+    <div class="legend-cards">
+
+      <!-- Magnus Carlsen -->
+      <div class="legend-card chess-legend reveal" style="transition-delay:0.1s" onclick="playLegendSound('chess')">
+        <div class="legend-banner">
+          <span class="legend-badge chess-badge">♟ Grandmaster Dunia</span>
+          <span class="legend-verified">✅</span>
+        </div>
+        <div class="legend-body">
+          <div class="legend-avatar-wrap">
+            <div class="legend-avatar chess-av">♔</div>
+            <div class="legend-online online-chess"></div>
+          </div>
+          <div class="legend-text">
+            <div class="legend-name chess-name">Magnus Carlsen</div>
+            <div class="legend-title">World Chess Champion · GM 2872 ELO · Norway 🇳🇴</div>
+            <div class="legend-msg chess-msg">
+              <div class="legend-msg-inner">
+                "Selamat ulang tahun! Seorang pemain catur sejati bukan dinilai dari berapa kali ia menang, tapi dari keberanian menghadapi setiap posisi sulit — persis seperti yang kamu lakukan dalam hidup. Teruslah bermain, teruslah berpikir beberapa langkah ke depan. Happy Birthday, King! ♔"
+              </div>
+            </div>
+            <div class="legend-emoji-row">♟ ♛ ♔ 🏆 🎂</div>
+          </div>
+        </div>
+        <div class="legend-shine"></div>
+      </div>
+
+      <!-- Garry Kasparov -->
+      <div class="legend-card chess-legend reveal" style="transition-delay:0.2s" onclick="playLegendSound('chess')">
+        <div class="legend-banner">
+          <span class="legend-badge chess-badge">♟ Grandmaster Legendaris</span>
+          <span class="legend-verified">✅</span>
+        </div>
+        <div class="legend-body">
+          <div class="legend-avatar-wrap">
+            <div class="legend-avatar chess-av">♕</div>
+            <div class="legend-online online-chess"></div>
+          </div>
+          <div class="legend-text">
+            <div class="legend-name chess-name">Garry Kasparov</div>
+            <div class="legend-title">Greatest Chess Player of All Time · Russia 🇷🇺</div>
+            <div class="legend-msg chess-msg">
+              <div class="legend-msg-inner">
+                "Dalam catur, seorang raja tidak pernah mundur sebelum semua bidak berjuang keras. Kamu adalah raja keluargamu — dan itu jauh lebih berharga dari semua gelar dunia manapun. Selamat ulang tahun, sang strategi abadi! Checkmate semua kesulitan hidup! ♛"
+              </div>
+            </div>
+            <div class="legend-emoji-row">♜ ♝ ♞ 👑 🎂</div>
+          </div>
+        </div>
+        <div class="legend-shine"></div>
+      </div>
+
+      <!-- Jeremy Wade -->
+      <div class="legend-card fish-legend reveal" style="transition-delay:0.3s" onclick="playLegendSound('fishing')">
+        <div class="legend-banner">
+          <span class="legend-badge fish-badge">🎣 River Monster Hunter</span>
+          <span class="legend-verified">✅</span>
+        </div>
+        <div class="legend-body">
+          <div class="legend-avatar-wrap">
+            <div class="legend-avatar fish-av">🎣</div>
+            <div class="legend-online online-fish"></div>
+          </div>
+          <div class="legend-text">
+            <div class="legend-name fish-name">Jeremy Wade</div>
+            <div class="legend-title">River Monsters Host · World's #1 Extreme Angler 🌍</div>
+            <div class="legend-msg fish-msg">
+              <div class="legend-msg-inner">
+                "Seorang pemancing sejati tahu bahwa kesabaran adalah kekuatan terbesar — bukan seberapa canggih alatnya, tapi seberapa kuat jiwanya. Kamu sudah membuktikan itu setiap hari. Semoga di hari spesialmu ini, ikan terbesar yang kamu impikan akhirnya muncul di ujung pancingmu! Happy Birthday! 🐟"
+              </div>
+            </div>
+            <div class="legend-emoji-row">🐡 🦈 🐠 🎣 🎂</div>
+          </div>
+        </div>
+        <div class="legend-shine"></div>
+      </div>
+
+      <!-- Roland Martin -->
+      <div class="legend-card fish-legend reveal" style="transition-delay:0.4s" onclick="playLegendSound('fishing')">
+        <div class="legend-banner">
+          <span class="legend-badge fish-badge">🏆 Bass Fishing Legend</span>
+          <span class="legend-verified">✅</span>
+        </div>
+        <div class="legend-body">
+          <div class="legend-avatar-wrap">
+            <div class="legend-avatar fish-av">🐟</div>
+            <div class="legend-online online-fish"></div>
+          </div>
+          <div class="legend-text">
+            <div class="legend-name fish-name">Roland Martin</div>
+            <div class="legend-title">Bass Fishing Hall of Fame · TV Host · USA 🇺🇸</div>
+            <div class="legend-msg fish-msg">
+              <div class="legend-msg-inner">
+                "Setiap pemancing besar bukan hanya menangkap ikan — ia menangkap momen, kenangan, dan ketenangan jiwa yang tidak bisa dibeli di tempat mana pun. Selamat ulang tahun untuk pemancing hebat! Semoga setiap cast-mu berbuah tangkapan luar biasa, dan semoga hidupmu selalu sepenuh jala yang berhasil! 🎣"
+              </div>
+            </div>
+            <div class="legend-emoji-row">🐬 🦑 🐙 🌊 🎂</div>
+          </div>
+        </div>
+        <div class="legend-shine"></div>
+      </div>
+
+      <!-- Hikaru Nakamura -->
+      <div class="legend-card chess-legend reveal" style="transition-delay:0.5s" onclick="playLegendSound('chess')">
+        <div class="legend-banner">
+          <span class="legend-badge chess-badge">♟ Speed Chess Champion</span>
+          <span class="legend-verified">✅</span>
+        </div>
+        <div class="legend-body">
+          <div class="legend-avatar-wrap">
+            <div class="legend-avatar chess-av">♞</div>
+            <div class="legend-online online-chess"></div>
+          </div>
+          <div class="legend-text">
+            <div class="legend-name chess-name">Hikaru Nakamura</div>
+            <div class="legend-title">US Chess Champion · Speedrun King · USA 🇺🇸</div>
+            <div class="legend-msg chess-msg">
+              <div class="legend-msg-inner">
+                "Di papan catur, saya bisa menghitung jutaan kemungkinan — tapi tidak ada satu pun kalkulasi yang bisa mengukur betapa berharganya seorang ayah yang sabar, bijaksana, dan penuh dedikasi. Happy Birthday! Semoga setiap langkah hidupmu selalu penuh dengan opening yang indah! 🎉♟"
+              </div>
+            </div>
+            <div class="legend-emoji-row">⚡ ♟ 🏆 👑 🎂</div>
+          </div>
+        </div>
+        <div class="legend-shine"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHESS MINI-GAME ===== -->
+<section id="chess-game">
+  <div class="chess-wrapper">
+    <div class="sec-title reveal">♟ Mini Catur Papa ♛</div>
+    <div class="sec-sub reveal">Tantang dirimu — siapa yang menang?</div>
+    <div class="reveal" style="text-align:center;margin-bottom:16px">
+      <span class="sec-music-tag chess-tag">🎵 Musik: Tegang & Dramatis</span>
+    </div>
+    <div class="chess-intro reveal">Papa selalu tenang, sabar, dan selalu berpikir beberapa langkah ke depan — persis seperti seorang Grand Master. Mungkin itulah kenapa Papa selalu bisa menghadapi tantangan hidup dengan bijak! ♟</div>
+    <div class="chess-arena reveal">
+      <div class="chess-header">
+        <div class="chess-player"><span class="chess-player-icon">👤</span><span class="chess-player-name">Kamu (Putih)</span></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px">VS</div>
+        <div class="chess-player"><span class="chess-player-name" style="color:var(--teal)">Papa (Hitam) 👑</span><span class="chess-player-icon">🤖</span></div>
+      </div>
+      <div class="chess-status" id="chess-status">Giliran Kamu — Klik buah caturmu!</div>
+      <div id="chess-board"></div>
+      <div class="chess-footer">
+        <button class="chess-btn" onclick="newChessGame()">🔄 Main Lagi</button>
+        <button class="chess-btn" onclick="showChessHint()">💡 Hint</button>
+        <button class="chess-btn" onclick="undoMove()">↩ Undo</button>
+      </div>
+      <div class="chess-move-log" id="chess-log">Siap bermain... Putih jalan duluan!</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FISHING GAME ===== -->
+<section id="fishing-game">
+  <div class="fishing-wrapper">
+    <div class="sec-title reveal">🎣 Mini Mancing Papa</div>
+    <div class="sec-sub reveal">Tap ikan sebelum kabur!</div>
+    <div class="reveal" style="text-align:center;margin-bottom:16px">
+      <span class="sec-music-tag fish-tag">🎵 Musik: Santai & Meditatif</span>
+    </div>
+    <div class="fishing-intro reveal" style="text-align:center;font-size:15px;font-style:italic;color:rgba(255,255,255,0.7);margin-bottom:24px">Seperti Papa yang sabar menunggu ikan — tapi disini harus gerak cepat! Tap ikan sebelum lepas dan kumpulkan skor terbesar! 🐟</div>
+    <div class="fishing-arena reveal">
+      <div class="fishing-sky">
+        <div class="fishing-moon"></div>
+        <div class="fishing-stars-wrap" id="fishing-stars"></div>
+        <div class="fishing-rod-game">🎣</div>
+        <div class="fishing-line-game" id="fishing-line" style="height:60px"><div class="fishing-bobber"></div></div>
+      </div>
+      <div class="fishing-water" id="fishing-water">
+        <div class="wave-overlay"></div>
+        <div class="wave-overlay wave-overlay2"></div>
+      </div>
+      <div class="fishing-panel">
+        <div class="fishing-stats">
+          <div class="fishing-stat"><span class="fishing-stat-val" id="fish-score">0</span><span class="fishing-stat-lbl">Skor</span></div>
+          <div class="fishing-stat"><span class="fishing-stat-val" id="fish-caught">0</span><span class="fishing-stat-lbl">Tangkapan</span></div>
+          <div class="fishing-stat"><span class="fishing-stat-val" id="fish-time">30</span><span class="fishing-stat-lbl">Detik</span></div>
+          <div class="fishing-stat"><span class="fishing-stat-val" id="fish-best">0</span><span class="fishing-stat-lbl">Rekor</span></div>
+        </div>
+        <div class="fishing-btns">
+          <button class="fish-btn fish-cast-btn" id="fish-main-btn" onclick="startFishing()">🎣 Mulai Mancing!</button>
+          <button class="fish-btn fish-reset-btn" onclick="resetFishing()">🔄 Reset</button>
+        </div>
+        <div class="fishing-msg" id="fishing-msg">Tekan mulai lalu tap ikan secepat mungkin!</div>
+        <div class="catch-log" id="catch-log">— Belum ada tangkapan —</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LETTER ===== -->
+<section id="letter">
+  <div class="letter-wrapper">
+    <div class="sec-title reveal">💌 Surat untuk Papa</div>
+    <div class="sec-sub reveal">Dari hati yang paling dalam</div>
+    <div class="reveal" style="text-align:center;margin-bottom:16px">
+      <span class="sec-music-tag letter-tag">🎵 Musik: Hangat & Emosional</span>
+    </div>
+    <div class="envelope-btn reveal" id="env-btn" onclick="openLetter()">
+      <div class="env-icon">📩</div>
+      <div class="env-hint">✦ Tap untuk membuka surat ✦</div>
+    </div>
+    <div class="letter-paper" id="letter-paper">
+      <div class="letter-top-deco">♟ ✦ 🎣 ✦ ♟</div>
+      <div class="letter-salute">Papa...</div>
+      <div class="letter-body" id="letter-body">
+        <p>Hari ini, 12 Juni, Papa bertambah satu tahun lagi.</p>
+        <p>Bukan cuma bertambah usia,<br>tapi juga bertambah pengalaman, perjuangan, dan pengorbanan yang Papa lakukan untuk keluarga kita.</p>
+        <div class="letter-hl"><p style="margin:0">Makasih ya, Pa, untuk semua yang sudah Papa lakukan selama ini.<br><br>Makasih karena selalu berusaha memberikan yang terbaik buat keluarga, bekerja keras setiap hari, dan tetap kuat menghadapi banyak hal demi kami.</p></div>
+        <p>Makasih juga untuk semua nasihat yang Papa kasih, perhatian yang mungkin sering nggak aku sadari, dan semua bentuk kasih sayang yang Papa tunjukkan dengan cara Papa sendiri.</p>
+        <p>Maaf ya, Pa, kalau selama ini aku masih sering bikin Papa kesal, bikin khawatir, atau belum bisa jadi anak yang Papa harapkan sepenuhnya.</p>
+        <div class="letter-hl"><p style="margin:0">Tapi aku ingin Papa tahu kalau aku bersyukur banget punya Papa seperti Papa.</p></div>
+        <p>Di ulang tahun Papa kali ini,<br>aku cuma berharap Papa selalu diberi kesehatan, kebahagiaan, dan umur yang panjang.</p>
+        <p>Semoga semua kerja keras dan kebaikan yang Papa lakukan selama ini bisa terbalaskan dengan banyak berkat dan hal-hal baik dalam hidup Papa.</p>
+      </div>
+      <div class="letter-close-text">Happy Birthday, Pa. 🎂❤️</div>
+      <div class="letter-sign">Tuhan Yesus memberkati selalu. 🙏<br><span style="font-family:'Dancing Script',cursive;font-size:18px;color:#8d6e63;display:block;margin-top:4px">— Anakmu yang selalu menyayangimu</span></div>
+      <div class="letter-bottom-deco">🐟 🎣 ♟ ♛ 🐠</div>
+      <button class="letter-close-btn" onclick="closeLetter()">✖ Tutup Surat</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WISHES ===== -->
+<section id="wishes">
+  <div class="sec-title reveal">🙏 Doa & Harapan untuk Papa</div>
+  <div class="sec-sub reveal">Semua dari hati yang tulus</div>
+  <div class="wishes-grid">
+    <div class="wish-card reveal" style="transition-delay:0.1s"><span class="wish-icon">💪</span><div class="wish-text"><span class="wish-highlight">Sehat Selalu</span><br>Tubuh kuat, semangat tak pernah padam</div></div>
+    <div class="wish-card reveal" style="transition-delay:0.2s"><span class="wish-icon">😊</span><div class="wish-text"><span class="wish-highlight">Selalu Bahagia</span><br>Senyum Papa = kekuatan kami</div></div>
+    <div class="wish-card reveal" style="transition-delay:0.3s"><span class="wish-icon">🎣</span><div class="wish-text"><span class="wish-highlight">Mancing Jaya</span><br>Ikan besar terus, rekor selalu dipecahin!</div></div>
+    <div class="wish-card reveal" style="transition-delay:0.4s"><span class="wish-icon">♛</span><div class="wish-text"><span class="wish-highlight">Raja Catur</span><br>Skakmat semua lawan tanpa keringat!</div></div>
+    <div class="wish-card reveal" style="transition-delay:0.5s"><span class="wish-icon">🏠</span><div class="wish-text"><span class="wish-highlight">Keluarga Rukun</span><br>Rumah penuh tawa, damai, dan kasih</div></div>
+    <div class="wish-card reveal" style="transition-delay:0.6s"><span class="wish-icon">🙏</span><div class="wish-text"><span class="wish-highlight">Berkat Melimpah</span><br>Tuhan jaga Papa setiap langkah</div></div>
+  </div>
+  <div class="fw-wrap reveal" id="fw-wrap"></div>
+  <div class="final-banner reveal">
+    <span class="final-banner-emoji">🎂</span>
+    <div class="final-banner-text">Happy Birthday Papa!<br>Aku sangat mencintaimu. ❤️</div>
+    <div class="final-banner-sub">♟ Strategimu = inspirasimu · 🎣 Kesabaranmu = teladanku ♟</div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-icons">🎣 ♟ 👑 ♛ 🐟</span>
+  <p>HAPPY BIRTHDAY PAPA · 12 JUNI · DENGAN CINTA TULUS ❤️</p>
+  <p style="margin-top:6px;font-size:10px;opacity:0.3">Tuhan Yesus memberkati selalu 🙏</p>
+</footer>
+
+<script>
+/* =========================================
+   WEB AUDIO API — SECTION-SPECIFIC MUSIC
+========================================= */
+let audioCtx = null;
+let currentSection = 'hero';
+let musicPlaying = false;
+let masterGain = null;
+let activeNodes = [];
+let sectionLoopTimeout = null;
+
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.4;
+    masterGain.connect(audioCtx.destination);
+    setupViz();
+  }
+  return audioCtx;
+}
+
+/* ---- MUSIC VIZ ---- */
+let analyser = null;
+let vizBars = [];
+function setupViz() {
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 64;
+  masterGain.connect(analyser);
+  const wrap = document.getElementById('music-viz');
+  wrap.innerHTML = '';
+  for (let i = 0; i < 30; i++) {
+    const b = document.createElement('div');
+    b.className = 'viz-bar';
+    b.style.height = '3px';
+    wrap.appendChild(b);
+    vizBars.push(b);
+  }
+  animViz();
+}
+function animViz() {
+  if (!analyser) return;
+  requestAnimationFrame(animViz);
+  if (!musicPlaying) { vizBars.forEach(b => b.style.height = '3px'); return; }
+  const data = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(data);
+  vizBars.forEach((b, i) => {
+    const v = (data[i] || 0) / 255;
+    b.style.height = Math.max(3, v * 46) + 'px';
+  });
+}
+
+/* ---- SOUND HELPERS ---- */
+function stopAllNodes() {
+  activeNodes.forEach(n => { try { n.stop(0); } catch(e){} });
+  activeNodes = [];
+  clearTimeout(sectionLoopTimeout);
+}
+
+function playNote(freq, startTime, duration, type='sine', gainVal=0.15, detune=0) {
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  osc.detune.value = detune;
+  g.gain.setValueAtTime(0, startTime);
+  g.gain.linearRampToValueAtTime(gainVal, startTime + 0.05);
+  g.gain.linearRampToValueAtTime(gainVal * 0.7, startTime + duration * 0.6);
+  g.gain.linearRampToValueAtTime(0, startTime + duration);
+  osc.connect(g);
+  g.connect(masterGain);
+  osc.start(startTime);
+  osc.stop(startTime + duration + 0.05);
+  activeNodes.push(osc);
+  return osc;
+}
+
+function playDrum(startTime, type='kick') {
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  if (type === 'kick') {
+    osc.frequency.setValueAtTime(150, startTime);
+    osc.frequency.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+    g.gain.setValueAtTime(0.4, startTime);
+    g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.35);
+  } else if (type === 'snare') {
+    osc.type = 'triangle';
+    osc.frequency.value = 200;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.18, startTime);
+    ng.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+    src.connect(ng); ng.connect(masterGain);
+    src.start(startTime);
+    activeNodes.push(src);
+    g.gain.setValueAtTime(0.1, startTime);
+    g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.08);
+  } else if (type === 'hihat') {
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.06, startTime);
+    ng.gain.exponentialRampToValueAtTime(0.01, startTime + 0.05);
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 8000;
+    src.connect(filter); filter.connect(ng); ng.connect(masterGain);
+    src.start(startTime);
+    activeNodes.push(src);
+    return;
+  }
+  osc.connect(g); g.connect(masterGain);
+  osc.start(startTime); osc.stop(startTime + 0.5);
+  activeNodes.push(osc);
+}
+
+/* =============================================
+   SECTION MUSIC DEFINITIONS
+============================================= */
+
+// HERO — Birthday fanfare, majestic, golden
+function playHeroMusic() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const BPM = 100, beat = 60 / BPM;
+  // Fanfare melody — triumphant
+  const melody = [
+    [523, 0], [523, 0.5], [659, 1], [784, 1.5],
+    [880, 2], [784, 2.5], [659, 3], [880, 3.5],
+    [1047, 4], [880, 4.5], [784, 5], [659, 5.5],
+    [523, 6], [659, 6.5], [784, 7], [523, 7.5],
+  ];
+  melody.forEach(([freq, t]) => playNote(freq, now + t * beat, beat * 0.8, 'triangle', 0.13));
+  // Bass line
+  const bass = [[131,0],[131,2],[175,4],[131,6]];
+  bass.forEach(([f,t]) => playNote(f, now + t * beat, beat * 1.8, 'sine', 0.18));
+  // Percussion
+  for (let i = 0; i < 8; i++) {
+    playDrum(now + i * beat, 'kick');
+    if (i % 2 === 1) playDrum(now + i * beat, 'snare');
+    playDrum(now + i * beat * 0.5, 'hihat');
+  }
+  // Harmony
+  const harm = [[659,0],[784,2],[880,4],[784,6]];
+  harm.forEach(([f,t]) => playNote(f, now + t * beat, beat * 1.5, 'sine', 0.06));
+  const dur = 8 * beat * 1000;
+  sectionLoopTimeout = setTimeout(playHeroMusic, dur - 100);
+}
+
+// CHESS — Tense, dramatic, minor key, slow
+function playChessMusic() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const beat = 0.7; // slow & heavy
+  // Dark minor melody
+  const melody = [
+    [220, 0], [246, 1], [220, 2], [196, 3],
+    [185, 4], [196, 5], [220, 6], [185, 7],
+    [165, 8], [185, 9], [196, 10], [220, 11],
+    [165, 12], [185, 13], [155, 14], [165, 15],
+  ];
+  melody.forEach(([freq, t]) => playNote(freq, now + t * beat, beat * 0.75, 'sawtooth', 0.09, -10));
+  // Tense ostinato (repeating pattern)
+  for (let i = 0; i < 16; i++) {
+    const freqs = [110, 110, 123, 110];
+    playNote(freqs[i % 4], now + i * beat * 0.5, beat * 0.4, 'square', 0.05);
+  }
+  // Deep bass pulses
+  for (let i = 0; i < 4; i++) {
+    playNote(55, now + i * 4 * beat, beat * 3, 'sine', 0.2);
+  }
+  // Dramatic hits
+  [0, 4, 8, 12].forEach(t => {
+    playDrum(now + t * beat, 'kick');
+    playDrum(now + t * beat + beat * 0.5, 'hihat');
+  });
+  const dur = 16 * beat * 1000;
+  sectionLoopTimeout = setTimeout(playChessMusic, dur - 100);
+}
+
+// FISHING — Calm, meditative, flowing, peaceful
+function playFishingMusic() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const beat = 1.2; // slow & relaxed
+  // Pentatonic melody, gentle
+  const melody = [
+    [392, 0], [440, 1.5], [494, 3], [440, 4.5],
+    [392, 6], [349, 7.5], [392, 9], [440, 10.5],
+    [494, 12], [523, 13.5], [494, 15], [440, 16.5],
+    [392, 18], [349, 19.5], [330, 21], [349, 22.5],
+  ];
+  melody.forEach(([freq, t]) => playNote(freq, now + t, beat * 0.9, 'sine', 0.1, 5));
+  // Watery arpeggios
+  const arps = [261, 329, 392, 329, 261, 329, 392, 523];
+  for (let i = 0; i < 24; i++) {
+    const f = arps[i % arps.length];
+    playNote(f, now + i * 1.05, 0.9, 'sine', 0.04, -20);
+  }
+  // Gentle bass
+  [130, 146, 130, 110, 123, 130].forEach((f, i) => {
+    playNote(f, now + i * 4.5, 4, 'sine', 0.14);
+  });
+  // Very soft rhythm — just ripple
+  for (let i = 0; i < 12; i++) {
+    if (i % 3 === 0) playDrum(now + i * beat, 'hihat');
+  }
+  const dur = 27 * 1000;
+  sectionLoopTimeout = setTimeout(playFishingMusic, dur - 100);
+}
+
+// LEGENDS — Heroic, orchestral-ish, grand
+function playLegendsMusic() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const beat = 0.55;
+  // Grand orchestral-like melody
+  const melody = [
+    [523,0],[587,1],[659,2],[698,3],[784,4],[698,5],[659,6],[587,7],
+    [523,8],[659,9],[784,10],[880,11],[784,12],[698,13],[659,14],[523,15],
+  ];
+  melody.forEach(([f,t]) => playNote(f, now + t * beat, beat * 0.85, 'triangle', 0.14));
+  // Brass-like harmony
+  const harm = [[330,0],[392,4],[440,8],[392,12]];
+  harm.forEach(([f,t]) => playNote(f, now + t * beat, beat * 3.5, 'sawtooth', 0.06, -30));
+  // March bass
+  [131,131,147,131,123,131,131,147].forEach((f,i) => {
+    playNote(f, now + i * 2 * beat, beat * 1.8, 'sine', 0.18);
+  });
+  // March drum
+  for (let i = 0; i < 16; i++) {
+    playDrum(now + i * beat, 'kick');
+    if (i % 4 === 2) playDrum(now + i * beat, 'snare');
+    playDrum(now + i * beat * 0.5, 'hihat');
+  }
+  const dur = 16 * beat * 1000;
+  sectionLoopTimeout = setTimeout(playLegendsMusic, dur - 100);
+}
+
+// LETTER — Warm, emotional, piano-like, tender
+function playLetterMusic() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const beat = 1.0;
+  // Tender melody
+  const melody = [
+    [523,0],[494,1],[440,2],[392,3],
+    [440,4],[494,5],[523,6],[587,7],
+    [659,8],[587,9],[523,10],[494,11],
+    [440,12],[392,13],[349,14],[392,15],
+  ];
+  melody.forEach(([f,t]) => playNote(f, now + t * beat, beat * 0.95, 'sine', 0.12, 8));
+  // Warm pads underneath
+  [[261,0],[294,4],[330,8],[294,12]].forEach(([f,t]) => {
+    playNote(f, now + t * beat, beat * 3.8, 'sine', 0.09, -15);
+  });
+  // Soft harmonic support
+  [[329,0],[370,4],[415,8],[370,12]].forEach(([f,t]) => {
+    playNote(f, now + t * beat, beat * 3.5, 'triangle', 0.05);
+  });
+  const dur = 16 * beat * 1000;
+  sectionLoopTimeout = setTimeout(playLetterMusic, dur - 100);
+}
+
+// WISHES — Celebratory, uplifting, joyful
+function playWishesMusic() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const beat = 0.45;
+  const melody = [
+    [784,0],[880,1],[988,2],[1047,3],[988,4],[880,5],[784,6],[698,7],
+    [784,8],[988,9],[880,10],[784,11],[698,12],[784,13],[880,14],[784,15],
+  ];
+  melody.forEach(([f,t]) => playNote(f, now + t * beat, beat * 0.8, 'triangle', 0.12));
+  // Festive arpeggio
+  const arps = [523,659,784,988,784,659];
+  for (let i = 0; i < 24; i++) {
+    playNote(arps[i % arps.length], now + i * beat * 0.666, beat * 0.55, 'sine', 0.05);
+  }
+  // Bass
+  [262,294,330,262,294,330,349,330].forEach((f,i) => {
+    playNote(f, now + i * 2 * beat, beat * 1.8, 'sine', 0.16);
+  });
+  // Party drums
+  for (let i = 0; i < 16; i++) {
+    playDrum(now + i * beat, i % 2 === 0 ? 'kick' : 'hihat');
+    if (i % 4 === 2) playDrum(now + i * beat, 'snare');
+  }
+  const dur = 16 * beat * 1000;
+  sectionLoopTimeout = setTimeout(playWishesMusic, dur - 100);
+}
+
+function playSectionMusic(section) {
+  if (!musicPlaying) return;
+  stopAllNodes();
+  const ctx = getAudioCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+  const label = document.getElementById('section-label');
+  const sectionMap = {
+    'hero': { fn: playHeroMusic, name: '🎂 Birthday Fanfare' },
+    'legends-section': { fn: playLegendsMusic, name: '🏆 Heroic & Grand' },
+    'chess-game': { fn: playChessMusic, name: '♟ Tense & Dramatic' },
+    'fishing-game': { fn: playFishingMusic, name: '🎣 Calm & Meditative' },
+    'letter': { fn: playLetterMusic, name: '💌 Warm & Emotional' },
+    'wishes': { fn: playWishesMusic, name: '🙏 Joyful & Uplifting' },
+  };
+  const s = sectionMap[section];
+  if (s) {
+    s.fn();
+    label.textContent = s.name;
+    label.style.opacity = '1';
+    setTimeout(() => { label.style.opacity = '0'; }, 3000);
+  }
+}
+
+// LEGEND CLICK SOUND
+function playLegendSound(type) {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  if (type === 'chess') {
+    // Piece click sound
+    const notes = [440, 550, 660];
+    notes.forEach((f, i) => playNote(f, now + i * 0.12, 0.25, 'triangle', 0.15));
+    toast('♟ ' + ['Magnus salute!', 'Kasparov speaks!', 'Nakamura nods!'][Math.floor(Math.random()*3)]);
+  } else {
+    const notes = [330, 415, 494];
+    notes.forEach((f, i) => playNote(f, now + i * 0.15, 0.3, 'sine', 0.12));
+    toast('🎣 ' + ['Wade berkata!', 'Roland hadir!'][Math.floor(Math.random()*2)]);
+  }
+}
+
+/* =========================================
+   MUSIC TOGGLE
+========================================= */
+let musicStarted = false;
+function toggleMusic() {
+  const btn = document.getElementById('music-btn');
+  if (musicPlaying) {
+    musicPlaying = false;
+    stopAllNodes();
+    btn.textContent = '🎵';
+    document.getElementById('music-viz').style.opacity = '0';
+    toast('⏸ Musik dijeda');
+  } else {
+    musicPlaying = true;
+    btn.textContent = '🔊';
+    document.getElementById('music-viz').style.opacity = '0.35';
+    toast('🎵 Musik diputar!');
+    playSectionMusic(currentSection);
+    if (!musicStarted) { musicStarted = true; }
+  }
+}
+
+// Auto-start on first interaction
+let firstTouch = false;
+['click','touchstart'].forEach(ev => {
+  document.addEventListener(ev, () => {
+    if (!firstTouch) {
+      firstTouch = true;
+      musicPlaying = true;
+      document.getElementById('music-btn').textContent = '🔊';
+      document.getElementById('music-viz').style.opacity = '0.35';
+      playSectionMusic(currentSection);
+    }
+  }, {once:true});
+});
+
+/* =========================================
+   CURSOR
+========================================= */
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+const cursorIcons = ['♟','♞','♛','🎣','🐟','♜','♝'];
+let cursorIdx = 0;
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.addEventListener('click', e => {
+  cursorIdx = (cursorIdx + 1) % cursorIcons.length;
+  cursor.textContent = cursorIcons[cursorIdx];
+  spawnRipple(e.clientX, e.clientY);
+  spawnSparkle(e.clientX, e.clientY);
+});
+function spawnRipple(x, y) {
+  const r = document.createElement('div');
+  r.className = 'ripple-p';
+  r.style.cssText = `left:${x}px;top:${y}px`;
+  document.body.appendChild(r);
+  setTimeout(() => r.remove(), 900);
+}
+function spawnSparkle(x, y) {
+  const sparks = ['✨','⭐','💫','🌟','✦'];
+  const s = document.createElement('div');
+  s.className = 'sparkle-p';
+  s.textContent = sparks[Math.floor(Math.random()*sparks.length)];
+  s.style.cssText = `left:${x+(Math.random()-0.5)*40}px;top:${y+(Math.random()-0.5)*40}px`;
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 1300);
+}
+
+/* =========================================
+   NAV + SECTION DETECTION
+========================================= */
+const sections = ['hero','legends-section','chess-game','fishing-game','letter','wishes'];
+const navDots = document.querySelectorAll('.nav-dot');
+window.addEventListener('scroll', () => {
+  const mid = window.scrollY + window.innerHeight / 3;
+  sections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && mid >= el.offsetTop && mid < el.offsetTop + el.offsetHeight) {
+      navDots.forEach(d => d.classList.remove('active'));
+      navDots[i]?.classList.add('active');
+      if (id !== currentSection) {
+        currentSection = id;
+        playSectionMusic(id);
+      }
+    }
+  });
+});
+function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+
+/* =========================================
+   TOAST
+========================================= */
+let toastT;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* =========================================
+   REVEAL
+========================================= */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* =========================================
+   FIXED BG
+========================================= */
+const bgEl = document.getElementById('fixed-bg');
+const pieces = ['♟','♞','♜','♝','♛','♚','🐟','🎣','🐠','♔'];
+for (let i = 0; i < 14; i++) {
+  const p = document.createElement('div');
+  const isFish = Math.random() > 0.5;
+  p.className = isFish ? 'bg-fish' : 'bg-chess-piece';
+  p.textContent = pieces[Math.floor(Math.random()*pieces.length)];
+  p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*20+15}s;animation-delay:-${Math.random()*20}s`;
+  bgEl.appendChild(p);
+}
+
+/* =========================================
+   HERO CHESS TILES
+========================================= */
+const heroChess = document.getElementById('hero-chess');
+for (let r = 0; r < 3; r++) {
+  for (let c = 0; c < 8; c++) {
+    const t = document.createElement('div');
+    t.className = 'chess-tile ' + ((r+c)%2===0?'light':'dark');
+    heroChess.appendChild(t);
+  }
+}
+
+/* =========================================
+   FISHING STARS
+========================================= */
+const fsWrap = document.getElementById('fishing-stars');
+for (let i = 0; i < 30; i++) {
+  const s = document.createElement('div');
+  const sz = Math.random()*2.5+1;
+  s.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;border-radius:50%;background:white;left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${Math.random()*0.7+0.2};animation:blink ${Math.random()*2+1}s ease-in-out infinite alternate;animation-delay:${Math.random()*2}s`;
+  fsWrap.appendChild(s);
+}
+
+/* =========================================
+   CONFETTI
+========================================= */
+const confColors = ['#e8b84b','#ffd97d','#ff7043','#00c9c8','#e91e63','#76ff03','#ff8f00','#fff'];
+function burstConfetti(count=50) {
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti-p';
+      const isCircle = Math.random()>0.5;
+      c.style.cssText = `left:${Math.random()*100}%;top:-10px;width:${Math.random()*9+5}px;height:${Math.random()*9+5}px;background:${confColors[Math.floor(Math.random()*confColors.length)]};border-radius:${isCircle?'50%':'2px'};animation-duration:${Math.random()*2+2.5}s;animation-delay:${Math.random()*0.5}s;`;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 5000);
+    }, i*40);
+  }
+}
+
+/* =========================================
+   FIREWORKS
+========================================= */
+function spawnFireworks() {
+  const wrap = document.getElementById('fw-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  for (let i = 0; i < 14; i++) {
+    const f = document.createElement('div');
+    f.className = 'fw-dot';
+    const col = confColors[Math.floor(Math.random()*confColors.length)];
+    f.style.cssText = `left:${Math.random()*90+5}%;top:${Math.random()*80+5}%;width:7px;height:7px;background:${col};box-shadow:0 0 8px ${col};animation-duration:${Math.random()*1.5+1.2}s;animation-delay:${Math.random()*2.5}s`;
+    wrap.appendChild(f);
+  }
+  setTimeout(spawnFireworks, 5000);
+}
+spawnFireworks();
+
+/* =========================================
+   LETTER
+========================================= */
+let letterOpened = false;
+function openLetter() {
+  if (letterOpened) return;
+  letterOpened = true;
+  document.getElementById('env-btn').style.display = 'none';
+  const p = document.getElementById('letter-paper');
+  p.style.display = 'block';
+  setTimeout(() => {
+    document.querySelectorAll('#letter-body p').forEach((el,i) => {
+      setTimeout(() => el.classList.add('vis'), i*200+300);
+    });
+  }, 400);
+  burstConfetti(40);
+  toast('💌 Surat terbuka!');
+}
+function closeLetter() {
+  letterOpened = false;
+  document.getElementById('letter-paper').style.display = 'none';
+  const eb = document.getElementById('env-btn');
+  eb.style.display='block'; eb.style.opacity=0;
+  setTimeout(() => { eb.style.transition='opacity 0.5s'; eb.style.opacity=1; }, 50);
+  document.querySelectorAll('#letter-body p').forEach(p => p.classList.remove('vis'));
+}
+
+/* =========================================
+   CHESS GAME
+========================================= */
+const PIECES = {
+  wK:'♔',wQ:'♕',wR:'♖',wB:'♗',wN:'♘',wP:'♙',
+  bK:'♚',bQ:'♛',bR:'♜',bB:'♝',bN:'♞',bP:'♟'
+};
+let board, selected, turn, moveHistory, gameOver;
+
+function initBoard() {
+  board = Array(8).fill(null).map(()=>Array(8).fill(null));
+  board[0] = ['bR','bN','bB','bQ','bK','bB','bN','bR'];
+  board[1] = Array(8).fill('bP');
+  board[6] = Array(8).fill('wP');
+  board[7] = ['wR','wN','wB','wQ','wK','wB','wN','wR'];
+  selected=null; turn='w'; moveHistory=[]; gameOver=false;
+}
+
+function newChessGame() {
+  initBoard(); renderBoard();
+  setStatus('Giliran Kamu — Klik buah caturmu!');
+  document.getElementById('chess-log').textContent='Game baru dimulai! Putih jalan duluan.';
+  toast('♟ Game Baru Dimulai!');
+}
+
+function renderBoard() {
+  const bd = document.getElementById('chess-board');
+  bd.innerHTML='';
+  for (let r=0;r<8;r++) {
+    for (let c=0;c<8;c++) {
+      const cell=document.createElement('div');
+      cell.className='chess-cell '+((r+c)%2===0?'light':'dark');
+      cell.dataset.r=r; cell.dataset.c=c;
+      if (board[r][c]) cell.textContent=PIECES[board[r][c]]||'';
+      if (selected&&selected[0]===r&&selected[1]===c) cell.classList.add('selected');
+      cell.addEventListener('click', onCellClick);
+      bd.appendChild(cell);
+    }
+  }
+}
+
+function setStatus(msg){document.getElementById('chess-status').textContent=msg;}
+function logMove(msg){
+  const log=document.getElementById('chess-log');
+  log.textContent=msg+' | '+log.textContent.substring(0,80);
+}
+
+function onCellClick(e) {
+  if (gameOver||turn!=='w') return;
+  const r=+e.currentTarget.dataset.r, c=+e.currentTarget.dataset.c;
+  if (selected) {
+    const moves=getLegalMoves(selected[0],selected[1]);
+    const isMove=moves.some(m=>m[0]===r&&m[1]===c);
+    if (isMove) {
+      doMove(selected[0],selected[1],r,c);
+      selected=null; renderBoard();
+      if (!gameOver) { turn='b'; setStatus('Papa (Hitam) sedang berpikir... 🤔'); setTimeout(aiMove,700); }
+    } else {
+      if (board[r][c]&&board[r][c][0]==='w') { selected=[r,c]; highlightMoves(); }
+      else { selected=null; renderBoard(); }
+    }
+  } else {
+    if (board[r][c]&&board[r][c][0]==='w') { selected=[r,c]; highlightMoves(); }
+  }
+}
+
+function highlightMoves() {
+  renderBoard();
+  const moves=getLegalMoves(selected[0],selected[1]);
+  document.querySelectorAll('.chess-cell').forEach(cell=>{
+    const r=+cell.dataset.r,c=+cell.dataset.c;
+    if (selected&&selected[0]===r&&selected[1]===c) cell.classList.add('selected');
+    if (moves.some(m=>m[0]===r&&m[1]===c)) cell.classList.add('movable');
+  });
+}
+
+function getLegalMoves(r,c) {
+  const p=board[r][c]; if(!p) return [];
+  const color=p[0],type=p[1],moves=[];
+  const enemy=color==='w'?'b':'w';
+  const add=(nr,nc)=>{
+    if(nr<0||nr>7||nc<0||nc>7) return false;
+    if(board[nr][nc]&&board[nr][nc][0]===color) return false;
+    moves.push([nr,nc]); return !board[nr][nc];
+  };
+  const slide=(dr,dc)=>{let nr=r+dr,nc=c+dc;while(add(nr,nc)){nr+=dr;nc+=dc;}};
+  if(type==='P'){
+    const dir=color==='w'?-1:1,start=color==='w'?6:1;
+    if(!board[r+dir]?.[c]){moves.push([r+dir,c]);if(r===start&&!board[r+2*dir]?.[c])moves.push([r+2*dir,c]);}
+    [[r+dir,c-1],[r+dir,c+1]].forEach(([nr,nc])=>{if(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]&&board[nr][nc][0]===enemy)moves.push([nr,nc]);});
+  } else if(type==='N'){
+    [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr,dc])=>add(r+dr,c+dc));
+  } else if(type==='B'){
+    [[-1,-1],[-1,1],[1,-1],[1,1]].forEach(([dr,dc])=>slide(dr,dc));
+  } else if(type==='R'){
+    [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>slide(dr,dc));
+  } else if(type==='Q'){
+    [[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>slide(dr,dc));
+  } else if(type==='K'){
+    [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc])=>add(r+dr,c+dc));
+  }
+  return moves;
+}
+
+function doMove(fr,fc,tr,tc) {
+  const p=board[fr][fc],cap=board[tr][tc];
+  moveHistory.push({fr,fc,tr,tc,p,cap,boardSnap:board.map(r=>[...r])});
+  board[tr][tc]=p; board[fr][fc]=null;
+  if(p==='wP'&&tr===0) board[tr][tc]='wQ';
+  if(p==='bP'&&tr===7) board[tr][tc]='bQ';
+  const colName=['a','b','c','d','e','f','g','h'];
+  logMove(`${PIECES[p]} ${colName[fc]}${8-fr}→${colName[tc]}${8-tr}`);
+  if(cap){
+    toast(`${PIECES[p]} memakan ${PIECES[cap]}! 💥`);
+    if(cap==='wK'){endGame('Papa (Hitam) menang! 👑');return;}
+    if(cap==='bK'){endGame('Kamu menang! 🎉');return;}
+  }
+}
+
+function endGame(msg) {
+  gameOver=true; setStatus(msg);
+  burstConfetti(60); toast('🏆 '+msg);
+}
+
+function aiMove() {
+  if(gameOver) return;
+  const allMoves=[];
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++) {
+    if(board[r][c]&&board[r][c][0]==='b') getLegalMoves(r,c).forEach(m=>allMoves.push({fr:r,fc:c,tr:m[0],tc:m[1]}));
+  }
+  if(!allMoves.length){endGame('Kamu menang! Tidak ada langkah tersisa! 🎉');return;}
+  const captures=allMoves.filter(m=>board[m.tr][m.tc]);
+  const move=captures.length?captures[Math.floor(Math.random()*captures.length)]:allMoves[Math.floor(Math.random()*allMoves.length)];
+  doMove(move.fr,move.fc,move.tr,move.tc);
+  renderBoard();
+  if(!gameOver){turn='w';setStatus('Giliran Kamu — Klik buah caturmu!');}
+}
+
+function showChessHint() {
+  const moves=[];
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++) {
+    if(board[r][c]&&board[r][c][0]==='w') getLegalMoves(r,c).forEach(m=>moves.push({fr:r,fc:c,tr:m[0],tc:m[1]}));
+  }
+  if(!moves.length){toast('Tidak ada langkah tersedia!');return;}
+  const m=moves[Math.floor(Math.random()*moves.length)];
+  const colName=['a','b','c','d','e','f','g','h'];
+  toast(`💡 Coba: ${PIECES[board[m.fr][m.fc]]} ${colName[m.fc]}${8-m.fr} → ${colName[m.tc]}${8-m.tr}`);
+}
+
+function undoMove() {
+  if(moveHistory.length<2){toast('↩ Tidak bisa undo lebih lagi');return;}
+  moveHistory.pop();
+  const last=moveHistory.pop();
+  if(!last){toast('Tidak ada langkah untuk diundo');return;}
+  board=last.boardSnap.map(r=>[...r]);
+  turn='w'; gameOver=false;
+  renderBoard(); setStatus('Giliran Kamu — Klik buah caturmu!');
+  toast('↩ Langkah diundo!');
+}
+
+/* =========================================
+   FISHING GAME
+========================================= */
+const FISH_TYPES=[
+  {e:'🐟',n:'Ikan Kecil',pts:10},
+  {e:'🐠',n:'Ikan Tropis',pts:20},
+  {e:'🐡',n:'Ikan Buntel',pts:30},
+  {e:'🦈',n:'HIU!',pts:100},
+  {e:'🐙',n:'Gurita',pts:50},
+  {e:'🦑',n:'Cumi-cumi',pts:40},
+  {e:'🐬',n:'Lumba-lumba',pts:75},
+];
+let fishScore=0,fishCaught=0,fishBest=0,fishTimer=30,fishInterval,timerInterval,fishActive=false;
+const catchLogLines=[];
+
+function startFishing() {
+  if(fishActive) return;
+  fishActive=true;
+  fishScore=0;fishCaught=0;fishTimer=30;
+  updateFishUI();
+  document.getElementById('fish-main-btn').disabled=true;
+  document.getElementById('fishing-msg').textContent='🎣 Tap ikan sebelum kabur!';
+  document.getElementById('catch-log').textContent='';
+  catchLogLines.length=0;
+  spawnFish();
+  timerInterval=setInterval(()=>{
+    fishTimer--;
+    document.getElementById('fish-time').textContent=fishTimer;
+    if(fishTimer<=5) document.getElementById('fish-time').style.color='#ff7043';
+    if(fishTimer<=0) endFishing();
+  },1000);
+}
+
+function spawnFish() {
+  if(!fishActive) return;
+  const water=document.getElementById('fishing-water');
+  const f=document.createElement('div');
+  f.className='fish-in-water';
+  const type=FISH_TYPES[Math.floor(Math.random()*FISH_TYPES.length)];
+  f.textContent=type.e;
+  const top=Math.random()*60+20;
+  const dur=Math.random()*5+4;
+  f.style.cssText=`top:${top}%;animation-duration:${dur}s;animation-delay:0s;font-size:${Math.random()*14+20}px`;
+  f.addEventListener('click',()=>catchFish(f,type,water));
+  f.addEventListener('touchstart',e=>{e.preventDefault();catchFish(f,type,water);},{passive:false});
+  water.appendChild(f);
+  setTimeout(()=>{if(f.parentNode)f.remove();},dur*1000+500);
+  const nextSpawn=Math.max(600,2200-(30-fishTimer)*40);
+  setTimeout(spawnFish,nextSpawn);
+}
+
+function catchFish(el,type,water) {
+  if(!fishActive||!el.parentNode) return;
+  const rect=el.getBoundingClientRect();
+  el.remove();
+  fishScore+=type.pts; fishCaught++;
+  if(fishScore>fishBest) fishBest=fishScore;
+  updateFishUI();
+  const pop=document.createElement('div');
+  pop.className='catch-anim';
+  pop.textContent=type.e;
+  pop.style.cssText=`left:${rect.left}px;top:${rect.top}px`;
+  document.body.appendChild(pop);
+  setTimeout(()=>pop.remove(),1300);
+  const sc=document.createElement('div');
+  sc.className='catch-anim';
+  sc.style.cssText=`left:${rect.left+30}px;top:${rect.top-10}px;font-size:16px;font-family:'Cinzel',serif;color:#ffd97d`;
+  sc.textContent='+'+type.pts;
+  document.body.appendChild(sc);
+  setTimeout(()=>sc.remove(),1300);
+  const msgs=['Mantap!','Kerennnn!','Joss!','Gokil!','Papa pasti bangga!','Luar biasa!','GG!'];
+  document.getElementById('fishing-msg').textContent=msgs[Math.floor(Math.random()*msgs.length)]+' +'+type.pts+' poin!';
+  catchLogLines.unshift(`${type.e} ${type.n} +${type.pts}`);
+  document.getElementById('catch-log').textContent=catchLogLines.slice(0,5).join(' · ');
+  if(type.pts>=75) burstConfetti(20);
+}
+
+function updateFishUI() {
+  document.getElementById('fish-score').textContent=fishScore;
+  document.getElementById('fish-caught').textContent=fishCaught;
+  document.getElementById('fish-best').textContent=fishBest;
+  document.getElementById('fish-time').style.color=fishTimer<=5?'#ff7043':'var(--gold)';
+}
+
+function endFishing() {
+  clearInterval(timerInterval);
+  fishActive=false;
+  document.querySelectorAll('.fish-in-water').forEach(f=>f.remove());
+  document.getElementById('fish-main-btn').disabled=false;
+  document.getElementById('fish-time').textContent='0';
+  let verdict;
+  if(fishScore>=300) verdict='🏆 LEGENDA! Papa pasti bangga!';
+  else if(fishScore>=150) verdict='🥇 Keren banget! Pro mancing!';
+  else if(fishScore>=60) verdict='🥈 Lumayan! Terus latihan!';
+  else verdict='🎣 Masih perlu belajar dari Papa!';
+  document.getElementById('fishing-msg').textContent=`Selesai! Skor: ${fishScore} — ${verdict}`;
+  toast(`🎣 Skor Final: ${fishScore}!`);
+  if(fishScore>=150) burstConfetti(50);
+}
+
+function resetFishing() {
+  clearInterval(timerInterval);
+  fishActive=false;
+  document.querySelectorAll('.fish-in-water').forEach(f=>f.remove());
+  fishScore=0;fishCaught=0;fishTimer=30;
+  document.getElementById('fish-time').style.color='var(--gold)';
+  document.getElementById('fish-main-btn').disabled=false;
+  document.getElementById('fishing-msg').textContent='Tekan mulai lalu tap ikan secepat mungkin!';
+  document.getElementById('catch-log').textContent='— Belum ada tangkapan —';
+  catchLogLines.length=0;
+  updateFishUI();
+  toast('🔄 Game direset!');
+}
+
+/* =========================================
+   INIT
+========================================= */
+window.addEventListener('load', () => {
+  initBoard(); renderBoard();
+  setTimeout(burstConfetti, 1000);
+  setTimeout(()=>toast('🎉 Happy Birthday Papa! 🎂❤️'), 1600);
+  setTimeout(()=>toast('♟ Coba mini game Catur & Mancing!'), 4500);
+  setTimeout(()=>toast('👑 Tap kartu Legenda untuk suara kejutan!'), 7000);
+});
+</script>
+</body>
+</html>
